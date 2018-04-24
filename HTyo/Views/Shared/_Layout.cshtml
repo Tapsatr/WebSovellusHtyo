@@ -30,7 +30,7 @@
                 @if (User.Identity.Name != null)
                 {
                     <a asp-area="" asp-controller="JobOrders" asp-action="EditUser" class="navbar-brand"> @User.Identity.Name</a>
-                }
+                } @*a*@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
