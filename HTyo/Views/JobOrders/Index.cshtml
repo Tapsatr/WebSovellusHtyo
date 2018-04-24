@@ -1,0 +1,230 @@
+﻿@model IEnumerable<HTyo.Models.JobOrder>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<form id="hakuehdot" method="post">
+    Nimi: <input type="text" id="name_search" /> <br />
+    Osoite: <input type="text" id="address" />
+    <input type="button" id="searh" value="Hae" onclick="getStudents();" />
+    <input type="button" id="new" value="Uusi opiskelija" onclick="newStudentClicked();" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Orderer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JobDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReadyDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AcceptedOrderDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RejectedOrderDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JobComment)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ToolsComment)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HoursOnJob)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PriceEstimate)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Orderer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JobDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReadyDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AcceptedOrderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RejectedOrderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JobComment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ToolsComment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HoursOnJob)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceEstimate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section scripts
+    {
+    <script>
+            debugger
+            //------------------------------Search----------------------------------------------------------------------------------------------
+        $('#loading').hide();
+        function hideLoading() {
+            $('#loading').hide();
+        }
+        function getStudents(){
+            var name = $("#name_search").val();
+            var addr = $("#address").val();
+
+            $('#loading').show();
+            $("#divStudentList").load("/Asiakas/GetStudents", { name: name, address: addr }, hideLoading);
+            
+        }
+            //------------------------------Delete----------------------------------------------------------------------------------------------
+        function deleteClicked(id) {
+
+            // jQuery UI pitää lisät Bower:n kautta (Projektin päällä hiiren oikean napin alta Manage Bower Packages ... )
+            $("#deleteDialog").load("/Asiakas/DeleteView", { id: id },  function () {
+
+                $("#deleteDialog").dialog(
+                    {
+                        title: "Poistetaanko asiakas?", width: 600, height: 400, modal: true, buttons: {
+                            OK: function () {
+                                deleteStudent(id, $(this)); 
+                            },
+                            Cancel: function () { $(this).dialog("close") }
+                        }
+                    })
+            }); 
+        }
+
+        function deleteStudent(id, dlg)
+        {
+            $.get("/Asiakas/Delete/" + id, function (data) {
+                if (data.status == "OK") {
+                    dlg.dialog("close");
+                    getStudents();
+                }
+            });
+
+        }
+
+            //------------------------------Create----------------------------------------------------------------------------------------------
+        function newStudentClicked() {
+            $("#newDialog").load("/JobOrders/CreateView", function () {
+                $("#newDialog").dialog(
+                    {
+                        title: "Anna opiskelijan tiedot", width: 600, height: 800, modal: true, buttons: {
+                            OK: function () {
+                                createStudent($(this));
+                            },
+                            Cancel: function () { $(this).dialog("close") }
+                        }
+                    })
+            });
+        }
+        function createStudent(dlg) {
+            var newoppilas = $("#newStudentForm").serialize();
+
+            $.ajax({
+                type: "POST",
+                data: newoppilas,
+                dataType: "json",
+                url: "/JobOrders/Create/",
+                success: function (data) {
+                    alert(data.msg);
+                    dlg.dialog("close");
+                    getStudents();
+                },
+                error: function (data) {
+                    alert(data.msg);
+                }
+            });
+        }
+            //------------------------------Edit----------------------------------------------------------------------------------------------
+        function editClicked(id) {
+
+            // jQuery UI pitää lisät Bower:n kautta (Projektin päällä hiiren oikean napin alta Manage Bower Packages ... )
+            $("#editDialog").load("/Asiakas/EditView", { id: id }, function () {
+
+                $("#editDialog").dialog(
+                    {
+                        title: "Poistetaanko asiakas?", width: 600, height: 800, modal: true, buttons: {
+                            OK: function () {
+                                editStudent($(this));
+                            },
+                            Cancel: function () { $(this).dialog("close") }
+                        }
+                    })
+            });
+        }
+        function editStudent(dlg) {
+            
+            var oppilas = $("#editStudentForm").serialize();
+
+            $.ajax({
+                type: "POST",
+                data: oppilas,
+                dataType: "json",
+                url: "/Asiakas/EditStudent/",
+                success: function (data) {
+                    alert(data.msg);
+                    dlg.dialog("close");
+                    getStudents();
+                },
+                error: function (data) {
+                    alert(data.msg);
+                }
+            });
+        }
+
+    </script>
+}
+
+<div id="loading">
+    <p><img src="~/images/loading.gif" /> Please Wait</p>
+</div>
+
+
+<div id="divStudentList">
+</div>
+<div id="deleteDialog">
+</div>
+<div id="newDialog">
+</div>
+<div id="editDialog">
+</div>
