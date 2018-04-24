@@ -10,7 +10,7 @@
     Nimi: <input type="text" id="name_search" /> <br />
     Osoite: <input type="text" id="address" />
     <input type="button" id="searh" value="Hae" onclick="getStudents();" />
-    <input type="button" id="new" value="Uusi opiskelija" onclick="newStudentClicked();" />
+    <input type="button" id="new" value="Uusi opiskelija" onclick="newUserClicked();" />
 </form>
 <table class="table">
     <thead>
@@ -144,7 +144,7 @@
         }
 
             //------------------------------Create----------------------------------------------------------------------------------------------
-        function newStudentClicked() {
+        function newUserClicked() {
             $("#newDialog").load("/JobOrders/CreateView", function () {
                 $("#newDialog").dialog(
                     {
@@ -157,18 +157,18 @@
                     })
             });
         }
-        function createStudent(dlg) {
-            var newoppilas = $("#newStudentForm").serialize();
+        function createUser(dlg) {
+            var newuser = $("#newUserForm").serialize();
 
             $.ajax({
                 type: "POST",
-                data: newoppilas,
+                data: newuser,
                 dataType: "json",
                 url: "/JobOrders/Create/",
                 success: function (data) {
                     alert(data.msg);
                     dlg.dialog("close");
-                    getStudents();
+                    getOrders();
                 },
                 error: function (data) {
                     alert(data.msg);

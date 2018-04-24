@@ -8,12 +8,22 @@ using Microsoft.EntityFrameworkCore;
 using HTyo.Data;
 using HTyo.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace HTyo
 {
     [Authorize]
     public class JobOrdersController : Controller
     {
+        private readonly UserContext _context;
+        private SignInManager<User> _signManager;
+        private UserManager<User> _userManager;
+        public JobOrdersController(UserManager<User> userManager, SignInManager<User> signManager, UserContext context)
+        {
+            _context = context;
+            _userManager = userManager;
+            _signManager = signManager;
+        }
 
         public IActionResult CreateView()
         {
@@ -21,17 +31,22 @@ namespace HTyo
             //ViewBag.AsiakastyyppiID = new SelectList(_context.AsiakasTyypit, "AsiakastyyppiID", "Selite");
             return PartialView("Create");
         }
-        private readonly UserContext _context;
-
-        public JobOrdersController(UserContext context)
-        {
-            _context = context;
-        }
 
         // GET: JobOrders
         public async Task<IActionResult> Index()
         {
             return View(await _context.JobOrders.ToListAsync());
+        }
+        private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        public async Task<IActionResult> EditUser()
+        {
+
+
+            var userI = await GetCurrentUserAsync();
+            var userId = userI?.Id;
+
+            var user = _context.Users.First(u => u.Id == userId);
+            return View(user);
         }
 
         // GET: JobOrders/Details/5
@@ -51,27 +66,33 @@ namespace HTyo
 
             return View(jobOrder);
         }
+     
+        public async Task<IActionResult> GetOrders(string name, string address)
+        {
+            var userI = await GetCurrentUserAsync();
+            var userId = userI?.Id;
 
-        // GET: JobOrders/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
+            var user = await _context.Users.Include(s => s.JobOrders).AsNoTracking().SingleOrDefaultAsync(m => m.Id == userId);
+
+            return View("Index", user);
+        }
 
         // POST: JobOrders/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Orderer,JobDescription,OrderDate,StartDate,ReadyDate,AcceptedOrderDate,RejectedOrderDate,JobComment,ToolsComment,HoursOnJob,PriceEstimate")] JobOrder jobOrder)
+        public async Task<IActionResult> Create([Bind("ID,Orderer,JobDescription")] JobOrder jobOrder)
         {
             if (ModelState.IsValid)
             {
+                jobOrder.OrderDate = DateTime.Now;
+                jobOrder.Orderer = User.Identity.Name;
                 _context.Add(jobOrder);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(jobOrder);
+            return View("Index",jobOrder);
         }
 
         // GET: JobOrders/Edit/5

@@ -9,7 +9,6 @@ namespace HTyo.Models
     public class JobOrder
     {
         public int ID { get; set; }
-        [Required]
         public string Orderer { get; set; }
         [Required]
         public string JobDescription { get; set; }

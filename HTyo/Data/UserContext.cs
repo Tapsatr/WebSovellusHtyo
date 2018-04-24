@@ -22,6 +22,7 @@ namespace HTyo.Data
 
             modelBuilder.Entity<JobOrder>().ToTable("JobOrder");
         }
+        public DbSet<HTyo.Models.User> User { get; set; }
 
     }
 }

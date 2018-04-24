@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using HTyo.Models;
 using Microsoft.AspNetCore.Identity;
 using HTyo.Data;
+using HTyo.Controllers;
 
 namespace HTyo.Controllers
 {
@@ -46,6 +47,12 @@ namespace HTyo.Controllers
             ModelState.AddModelError("", "Invalid login attempt");
             return View(model);
         }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
 
         // GET: Users/Create
         public IActionResult Register()
@@ -53,12 +60,13 @@ namespace HTyo.Controllers
             return View();
         }
 
+
         // POST: Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("ID,UserName,Password,Name,Address,BillingAddress,PhoneNumber,Email,HouseType,FloorArea,LotArea")] User model)
+        public async Task<IActionResult> Register([Bind("ID,UserName,Password,ConfirmPassword,Name,Address,BillingAddress,PhoneNumber,Email,HouseType,FloorArea,LotArea")] User model)
         {
             if (ModelState.IsValid)
             {
