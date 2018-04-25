@@ -26,12 +26,14 @@ namespace HTyo.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            ViewBag.success = TempData["success"];
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
         {
+            
             if (ModelState.IsValid)
             {
                 var result = await _signManager.PasswordSignInAsync(model.UserName,
@@ -70,10 +72,14 @@ namespace HTyo.Controllers
         {
             if (ModelState.IsValid)
             {
-                //_context.Add(user);
+                var result = await _userManager.CreateAsync(model, model.Password);
+                if (result.Succeeded)
+                {
+                    TempData["success"] = "Succesfully created user!";
+                    return RedirectToAction("Login", "Account");
+                }
+                ViewBag.success = result.Errors.FirstOrDefault().Description;
                 
-                await _userManager.CreateAsync(model, model.Password);//_context.SaveChangesAsync();
-                return RedirectToAction("Login", "Account");
             }
             return View(model);
         }

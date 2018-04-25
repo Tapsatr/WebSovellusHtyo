@@ -25,6 +25,14 @@
 #qrCode {
     margin: 15px;
 }
+.logout-btn {
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {

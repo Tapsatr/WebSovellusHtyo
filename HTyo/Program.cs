@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HTyo.Data;
+using HTyo.Models;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,7 +26,9 @@ namespace HTyo
                 try
                 {
                     var context = services.GetRequiredService<UserContext>();
-                    DbInitializer.Initialize(context);
+                    var usermanager = services.GetRequiredService<UserManager<User>>();
+                    
+                    DbInitializer.Initialize(context, usermanager);
                 }
                 catch (Exception ex)
                 {

@@ -25,23 +25,19 @@ namespace HTyo
             _signManager = signManager;
         }
 
-        public IActionResult CreateView()
+        public IActionResult Create()
         {
-
-            //ViewBag.AsiakastyyppiID = new SelectList(_context.AsiakasTyypit, "AsiakastyyppiID", "Selite");
             return PartialView("Create");
         }
 
         // GET: JobOrders
         public async Task<IActionResult> Index()
         {
-            return View(await _context.JobOrders.ToListAsync());
+            return View(await _context.JobOrders.Where(s => s.Orderer == User.Identity.Name).ToListAsync());
         }
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         public async Task<IActionResult> EditUser()
         {
-
-
             var userI = await GetCurrentUserAsync();
             var userId = userI?.Id;
 
@@ -66,16 +62,16 @@ namespace HTyo
 
             return View(jobOrder);
         }
-     
-        public async Task<IActionResult> GetOrders(string name, string address)
-        {
-            var userI = await GetCurrentUserAsync();
-            var userId = userI?.Id;
+                    // EI TARVITA ?! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        //public async Task<IActionResult> GetOrders(string name, string address)
+        //{
+        //    var userI = await GetCurrentUserAsync();
+        //    var userId = userI?.Id;
 
-            var user = await _context.Users.Include(s => s.JobOrders).AsNoTracking().SingleOrDefaultAsync(m => m.Id == userId);
+        //    var user = await _context.Users.Include(s => s.JobOrders).AsNoTracking().SingleOrDefaultAsync(m => m.Id == userId);
 
-            return View("Index", user);
-        }
+        //    return View("Index", user);
+        //}
 
         // POST: JobOrders/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -86,8 +82,9 @@ namespace HTyo
         {
             if (ModelState.IsValid)
             {
-                jobOrder.OrderDate = DateTime.Now;
+                jobOrder.OrderDate = DateTime.Today;
                 jobOrder.Orderer = User.Identity.Name;
+                jobOrder.Status = Status.ORDERED;
                 _context.Add(jobOrder);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -96,7 +93,7 @@ namespace HTyo
         }
 
         // GET: JobOrders/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> EditOrder(int? id)
         {
             if (id == null)
             {
@@ -108,7 +105,7 @@ namespace HTyo
             {
                 return NotFound();
             }
-            return View(jobOrder);
+            return PartialView("EditOrder",jobOrder);
         }
 
         // POST: JobOrders/Edit/5
@@ -116,34 +113,32 @@ namespace HTyo
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Orderer,JobDescription,OrderDate,StartDate,ReadyDate,AcceptedOrderDate,RejectedOrderDate,JobComment,ToolsComment,HoursOnJob,PriceEstimate")] JobOrder jobOrder)
+        public async Task<IActionResult> EditOrderPost(int? id)
         {
-            if (id != jobOrder.ID)
+            if (id == null)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            var studentToUpdate = await _context.JobOrders.SingleOrDefaultAsync(s => s.ID == id);
+            if (await TryUpdateModelAsync<JobOrder>(
+                studentToUpdate,
+                "",
+                s => s.JobDescription))
             {
                 try
                 {
-                    _context.Update(jobOrder);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException /* ex */)
                 {
-                    if (!JobOrderExists(jobOrder.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(jobOrder);
+            return View(studentToUpdate);
         }
 
         // GET: JobOrders/Delete/5
@@ -156,7 +151,7 @@ namespace HTyo
 
             var jobOrder = await _context.JobOrders
                 .SingleOrDefaultAsync(m => m.ID == id);
-            if (jobOrder == null)
+            if (jobOrder == null || jobOrder.Status != Status.ORDERED)
             {
                 return NotFound();
             }
