@@ -9,3 +9,14 @@ C:\Users\T.R\Desktop\koulu\WebSovellus\HTyo\HTyo\obj\Debug\netcoreapp2.0\HTyo.As
 C:\Users\T.R\Desktop\koulu\WebSovellus\HTyo\HTyo\obj\Debug\netcoreapp2.0\HTyo.dll
 C:\Users\T.R\Desktop\koulu\WebSovellus\HTyo\HTyo\obj\Debug\netcoreapp2.0\HTyo.pdb
 C:\Users\T.R\Desktop\koulu\WebSovellus\HTyo\HTyo\obj\Debug\netcoreapp2.0\HTyo.csprojResolveAssemblyReference.cache
+C:\Users\t.r\Desktop\Koulu\WebSovellusHtyo\HTyo\bin\Debug\netcoreapp2.0\HTyo.deps.json
+C:\Users\t.r\Desktop\Koulu\WebSovellusHtyo\HTyo\bin\Debug\netcoreapp2.0\HTyo.runtimeconfig.json
+C:\Users\t.r\Desktop\Koulu\WebSovellusHtyo\HTyo\bin\Debug\netcoreapp2.0\HTyo.runtimeconfig.dev.json
+C:\Users\t.r\Desktop\Koulu\WebSovellusHtyo\HTyo\bin\Debug\netcoreapp2.0\HTyo.dll
+C:\Users\t.r\Desktop\Koulu\WebSovellusHtyo\HTyo\bin\Debug\netcoreapp2.0\HTyo.pdb
+C:\Users\t.r\Desktop\Koulu\WebSovellusHtyo\HTyo\obj\Debug\netcoreapp2.0\HTyo.csprojResolveAssemblyReference.cache
+C:\Users\t.r\Desktop\Koulu\WebSovellusHtyo\HTyo\obj\Debug\netcoreapp2.0\HTyo.csproj.CoreCompileInputs.cache
+C:\Users\t.r\Desktop\Koulu\WebSovellusHtyo\HTyo\obj\Debug\netcoreapp2.0\HTyo.AssemblyInfoInputs.cache
+C:\Users\t.r\Desktop\Koulu\WebSovellusHtyo\HTyo\obj\Debug\netcoreapp2.0\HTyo.AssemblyInfo.cs
+C:\Users\t.r\Desktop\Koulu\WebSovellusHtyo\HTyo\obj\Debug\netcoreapp2.0\HTyo.dll
+C:\Users\t.r\Desktop\Koulu\WebSovellusHtyo\HTyo\obj\Debug\netcoreapp2.0\HTyo.pdb

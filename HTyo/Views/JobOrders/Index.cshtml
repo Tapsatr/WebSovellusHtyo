@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Your Orders</h2>
 
 <form method="post">
     <input type="button" class="btn" id="new" value="New order" onclick="newUserClicked();" />
@@ -95,6 +95,13 @@
                 @if (item.Status == Status.ORDERED)
                 {
                     <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                }
+                @if(item.RejectedOrderDate == null && item.AcceptedOrderDate == null && item.Status== Status.READY)
+                {
+                    <form asp-action="AcceptedOrRejected" asp-route-id="@item.ID">
+                        <button name="button" value="accept">Accept</button>
+                        <button name="button" value="reject">Reject</button>
+                    </form>
                 }
             </td>
         </tr>

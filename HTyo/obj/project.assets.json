@@ -13122,30 +13122,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\T.R\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {},
+    "C:\\Users\\t.r\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
-    "restoreSettings": {
-      "hideWarningsAndErrors": true
-    },
     "restore": {
-      "projectUniqueName": "C:\\Users\\T.R\\Desktop\\koulu\\WebSovellus\\HTyo\\HTyo\\HTyo.csproj",
+      "projectUniqueName": "C:\\Users\\t.r\\Desktop\\Koulu\\WebSovellusHtyo\\HTyo\\HTyo.csproj",
       "projectName": "HTyo",
-      "projectPath": "C:\\Users\\T.R\\Desktop\\koulu\\WebSovellus\\HTyo\\HTyo\\HTyo.csproj",
-      "packagesPath": "C:\\Users\\T.R\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\T.R\\Desktop\\koulu\\WebSovellus\\HTyo\\HTyo\\obj\\",
+      "projectPath": "C:\\Users\\t.r\\Desktop\\Koulu\\WebSovellusHtyo\\HTyo\\HTyo.csproj",
+      "packagesPath": "C:\\Users\\t.r\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\t.r\\Desktop\\Koulu\\WebSovellusHtyo\\HTyo\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\T.R\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
+        "C:\\Users\\t.r\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"

@@ -36,9 +36,15 @@ namespace HTyo.Data
                      new JobOrder{Orderer="Tapio", AcceptedOrderDate=DateTime.Parse("2018-05-01"), OrderDate=DateTime.Parse("2017-12-22"),
                     JobDescription ="Fix kitchen", JobComment="Hard job", ReadyDate=DateTime.Parse("2018-05-10"), ToolsComment="Drill",
                     HoursOnJob =250, StartDate=DateTime.Parse("2018-05-02"), Status= Status.READY },
-                    new JobOrder{Orderer="Tapio2", RejectedOrderDate=DateTime.Parse("2018-05-01"), OrderDate=DateTime.Parse("2017-12-22"),
+                    new JobOrder{Orderer="Tapio2",StartDate=DateTime.Parse("1999-12-12"),ReadyDate=DateTime.Parse("2000-05-09"), RejectedOrderDate=DateTime.Parse("2018-05-01"), OrderDate=DateTime.Parse("2017-12-22"),
                     JobDescription ="Mow lawn", JobComment="no lawn",
-                    Status= Status.REJECTED }
+                    Status= Status.REJECTED },
+                    new JobOrder{Orderer="Tapio2",StartDate = DateTime.Parse("2000-02-02"), ReadyDate=DateTime.Parse("2018-05-01"), OrderDate=DateTime.Parse("2017-12-22"),
+                    JobDescription ="Mow lawn", JobComment="no lawn",
+                    Status= Status.READY },
+                    new JobOrder{Orderer="Tapio",StartDate = DateTime.Parse("2000-02-02"), ReadyDate=DateTime.Parse("2018-05-01"), OrderDate=DateTime.Parse("2017-12-22"),
+                    JobDescription ="Mow lawn", JobComment="no lawn",
+                    Status= Status.READY }
             };
             foreach (JobOrder j in orders)
             {

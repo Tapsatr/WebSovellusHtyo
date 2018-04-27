@@ -18,6 +18,11 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -44,8 +49,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="HouseType" class="control-label"></label>
-                <input asp-for="HouseType" class="form-control" />
-                <span asp-validation-for="HouseType" class="text-danger"></span>
+                <br />
+                <select asp-for="HouseType" asp-items="Html.GetEnumSelectList<HouseType>()"></select>
             </div>
             <div class="form-group">
                 <label asp-for="FloorArea" class="control-label"></label>

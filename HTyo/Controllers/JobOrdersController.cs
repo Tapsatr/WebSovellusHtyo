@@ -29,50 +29,37 @@ namespace HTyo
         {
             return PartialView("Create");
         }
-
-        // GET: JobOrders
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.JobOrders.Where(s => s.Orderer == User.Identity.Name).ToListAsync());
-        }
-        private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
-        public async Task<IActionResult> EditUser()
-        {
-            var userI = await GetCurrentUserAsync();
-            var userId = userI?.Id;
-
-            var user = _context.Users.First(u => u.Id == userId);
-            return View(user);
-        }
-
-        // GET: JobOrders/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> AcceptedOrRejected(string button, int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var jobOrder = await _context.JobOrders
-                .SingleOrDefaultAsync(m => m.ID == id);
+            var jobOrder = await _context.JobOrders.SingleOrDefaultAsync(m => m.ID == id);
             if (jobOrder == null)
             {
                 return NotFound();
             }
-
-            return View(jobOrder);
+            if (button == "accept")
+            {
+                jobOrder.Status = Status.ACCEPTED;
+                jobOrder.AcceptedOrderDate = DateTime.Now;
+            }
+            else if(button =="reject")
+            {
+                jobOrder.Status = Status.REJECTED;
+                jobOrder.RejectedOrderDate = DateTime.Now;
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
-                    // EI TARVITA ?! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        //public async Task<IActionResult> GetOrders(string name, string address)
-        //{
-        //    var userI = await GetCurrentUserAsync();
-        //    var userId = userI?.Id;
 
-        //    var user = await _context.Users.Include(s => s.JobOrders).AsNoTracking().SingleOrDefaultAsync(m => m.Id == userId);
-
-        //    return View("Index", user);
-        //}
-
+        // GET: JobOrders
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.JobOrders.Where(s => s.Orderer == User.Identity.Name).ToListAsync());
+        }
         // POST: JobOrders/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -89,8 +76,52 @@ namespace HTyo
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View("Index",jobOrder);
+            return View("Index", jobOrder);
         }
+
+        private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        public async Task<IActionResult> EditUser()
+        {
+            var userI = await GetCurrentUserAsync();
+            var userId = userI?.Id;
+
+            var user = _context.Users.First(u => u.Id == userId);
+            return View(user);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser([Bind("Id,Password,ConfirmPassword,Name,Address,BillingAddress,PhoneNumber,Email," +
+            "HouseType,FloorArea,LotArea")] User model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.Id);
+                user.Name = model.Name;
+                user.PhoneNumber = model.PhoneNumber;
+                user.BillingAddress = model.BillingAddress;
+                user.HouseType = model.HouseType;
+                user.FloorArea = model.FloorArea;
+                user.Email = model.Email;
+                user.Address = model.Address;
+                user.LotArea = model.LotArea;
+
+                user.Password = model.Password;
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.Password);                    
+                await _userManager.UpdateSecurityStampAsync(user);
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    TempData["success"] = "Succesfully edited user!";
+                    return RedirectToAction("Index", "JobOrders");
+                }
+                ViewBag.success = result.Errors.FirstOrDefault().Description;
+
+            }
+            return View(model);
+        }
+
+
 
         // GET: JobOrders/Edit/5
         public async Task<IActionResult> EditOrder(int? id)
