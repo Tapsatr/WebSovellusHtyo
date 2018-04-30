@@ -5,10 +5,11 @@
 }
 
 <h2>Your Orders</h2>
-
+<h4>@ViewBag.edit</h4>
 <form method="post">
     <input type="button" class="btn" id="new" value="New order" onclick="newUserClicked();" />
 </form>
+
 <table class="table">
     <thead>
         <tr>
@@ -52,69 +53,70 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Orderer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JobDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReadyDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AcceptedOrderDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RejectedOrderDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JobComment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ToolsComment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HoursOnJob)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PriceEstimate)
-            </td>
-            <td>
-                <a onclick="editClicked(@item.ID)">Edit</a> |
-                @if (item.Status == Status.ORDERED)
-                {
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                }
-                @if(item.RejectedOrderDate == null && item.AcceptedOrderDate == null && item.Status== Status.READY)
-                {
-                    <form asp-action="AcceptedOrRejected" asp-route-id="@item.ID">
-                        <button name="button" value="accept">Accept</button>
-                        <button name="button" value="reject">Reject</button>
-                    </form>
-                }
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Orderer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JobDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReadyDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AcceptedOrderDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RejectedOrderDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JobComment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ToolsComment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HoursOnJob)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceEstimate)
+                </td>
+                <td>
+                    @if (item.Status == Status.ORDERED)
+                    {
+                        <a onclick="editClicked(@item.ID)">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    }
+                    @if (item.RejectedOrderDate == null && item.AcceptedOrderDate == null && item.Status == Status.READY)
+                    {
+                        <form asp-action="AcceptedOrRejected" asp-route-id="@item.ID">
+                            <button name="button" value="accept">Accept</button>
+                            <button name="button" value="reject">Reject</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
 @section scripts
     {
     <script>
-            
 
-            //------------------------------Create----------------------------------------------------------------------------------------------
+
+        //------------------------------Create----------------------------------------------------------------------------------------------
         function newUserClicked() {
             $("#newDialog").load("/JobOrders/Create", function () {
                 $("#newDialog").dialog(
@@ -146,12 +148,12 @@
                 }
             });
         }
-            //------------------------------Edit----------------------------------------------------------------------------------------------
+        //------------------------------Edit----------------------------------------------------------------------------------------------
         function editClicked(id) {
 
             $("#editDialog").load("/JobOrders/EditOrder", { id: id }, function () {
 
-                $("#editDialog").dialog(    
+                $("#editDialog").dialog(
                     {
                         title: "Edit Order", width: 600, height: 800, modal: true, buttons: {
                             OK: function () {
@@ -163,7 +165,7 @@
             });
         }
         function editStudent(dlg) {
-            
+
             var oppilas = $("#editOrderForm").serialize();
 
             $.ajax({

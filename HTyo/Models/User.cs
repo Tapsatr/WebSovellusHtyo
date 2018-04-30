@@ -21,6 +21,7 @@ namespace HTyo.Models
         [NotMapped]
         [Compare("Password")]
         [DataType(DataType.Password)]
+        [Display(Name="Confirm Password")]
         public string ConfirmPassword { get; set; }
         [Required]
         public string Name { get; set; }
@@ -28,16 +29,21 @@ namespace HTyo.Models
         [Required]
         public string Address { get; set; }
         [Required]
+        [Display(Name="Billing Address")]
         public string BillingAddress { get; set; }
         [Required]
+        [Display(Name="Phone Number")]
         public string PhoneNumber { get; set; }
         [Required]
         public string Email { get; set; }
 
+        [Display(Name="House Type")]
         public HouseType? HouseType { get; set; }
 
+        [Display(Name="Floor Area")]
         public string FloorArea { get; set; }
 
+        [Display(Name="Lot Area")]
         public string LotArea { get; set; }
 
      

@@ -58,6 +58,7 @@ namespace HTyo
         // GET: JobOrders
         public async Task<IActionResult> Index()
         {
+            ViewBag.edit = TempData["edit"];
             return View(await _context.JobOrders.Where(s => s.Orderer == User.Identity.Name).ToListAsync());
         }
         // POST: JobOrders/Create
@@ -112,7 +113,7 @@ namespace HTyo
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
-                    TempData["success"] = "Succesfully edited user!";
+                    TempData["edit"] = "Succesfully edited user!";
                     return RedirectToAction("Index", "JobOrders");
                 }
                 ViewBag.success = result.Errors.FirstOrDefault().Description;
@@ -126,6 +127,7 @@ namespace HTyo
         // GET: JobOrders/Edit/5
         public async Task<IActionResult> EditOrder(int? id)
         {
+            
             if (id == null)
             {
                 return NotFound();
